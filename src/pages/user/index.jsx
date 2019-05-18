@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Pagination } from 'antd';
+import { Table, Pagination, Popconfirm, Button } from 'antd';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import ModalForm from './components/Modal';
@@ -39,7 +39,14 @@ class User extends Component {
 									<a href="javascript:;;">编辑</a>
 								</ModalForm>
 								&nbsp;
-								<a href="javascript:;;">删除</a>
+								<Popconfirm
+									title="确定要删除吗?"
+									okText="是"
+									cancelText="否"
+									onConfirm={this.confirmDelete.bind(null, item.id)}
+								>
+									<a href="javascript:;;">删除</a>
+								</Popconfirm>
 							</div>
 						);
 					}
@@ -96,12 +103,42 @@ class User extends Component {
 			}
 		});
 	};
+	/**
+	 * @method 删除用户
+	 * @param {Number} id
+ 	 */
+	confirmDelete = (id) => {
+		let { dispatch } = this.props;
+		dispatch({
+			type: 'users/deleteUser',
+			payload: {
+				id
+			}
+		});
+	};
+	/**
+	 * @method 添加用户
+	 */
+	createUser = (values) => {
+		let { dispatch } = this.props;
+		dispatch({
+			type: 'users/addUser',
+			payload: {
+				values
+			}
+		}).then(res=>{
+			console.log(res);
+		})
+	};
 	componentDidMount() {}
 	render() {
 		let { columns } = this.state;
 		let { list, page, total, loading } = this.props;
 		return (
 			<div className="user-page">
+				<ModalForm columns={this.state.formRules} okHandle={this.createUser}>
+					<Button className="create-btn" type="primary">创建用户</Button>
+				</ModalForm>
 				<Table
 					columns={columns}
 					dataSource={list}
@@ -109,7 +146,7 @@ class User extends Component {
 					rowKey={(item) => item.id}
 					loading={loading}
 				/>
-				<Pagination current={page} total={total} onChange={this.onPageChange} pageSize={3} />
+				<Pagination class="pagination'"  current={page} total={total} onChange={this.onPageChange} pageSize={3} />
 			</div>
 		);
 	}

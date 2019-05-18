@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, Form, Input, Radio } from 'antd';
+import { Button, Modal, Form, Input } from 'antd';
 
 class ModalForm extends Component {
 	constructor(props) {
@@ -12,7 +12,6 @@ class ModalForm extends Component {
    * @method 显示modal
    */
 	showModal = (e) => {
-		console.log(e);
 		this.setState({
 			visible: true
 		});
@@ -44,7 +43,7 @@ class ModalForm extends Component {
 	};
 
 	render() {
-		const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+		const { getFieldDecorator } = this.props.form;
 		let { columns, data } = this.props;
 		let formItems = '';
 		if (columns && columns.length) {
@@ -55,10 +54,10 @@ class ModalForm extends Component {
 							rules: [
 								{
 									required: true,
-									message: `Please input your ${item.key}!`
+									message: `请输入${item.key}!`
 								}
 							],
-							initialValue: data[item.key]
+							initialValue: data ? data[item.key] : ''
 						})(<Input placehoder={item.key} />)}
 					</Form.Item>
 				);

@@ -18,7 +18,11 @@ export default {
 			}
 		]
 	],
-	publicPath: '/static/',
+	//是否禁用css modules
+	disableCSSModules:false,
+	//打包静态资源后缀
+	publicPath: '/',
+	//proxy代理
 	proxy: {
 		'/api': {
 			target: 'http://jsonplaceholder.typicode.com/',
